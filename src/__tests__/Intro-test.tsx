@@ -1,16 +1,30 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
 import Intro from '../Intro';
-import {render, screen, fireEvent} from '@testing-library/react-native';
+import {render, cleanup} from '@testing-library/react-native';
 
-test('examples of some things', async () => {
-  const expectedUsername = 'Ada Lovelace';
-  render(<Intro />);
+afterEach(cleanup);
 
-  fireEvent.changeText(screen.getByTestId('input'), expectedUsername);
-  fireEvent.press(screen.getByText('Print Username'));
+describe('<Intro />', () => {
+  it('corresponde au composant', () => {
+    const rendered = render(<Intro value={'charles'} />).toJSON();
+    expect(rendered).toMatchSnapshot();
+  });
 
-  const usernameOutput = await screen.findByTestId('printed-username');
-  expect(usernameOutput).toHaveTextContent(expectedUsername);
-  expect(screen.toJSON()).toMatchSnapshot();
+  it('devrait rendre correctement le texte', () => {
+    const rendered = render(<Intro value={'charles'} />);
+    const textComponent = rendered.getByTestId('text');
+    expect(textComponent.props.children).toEqual('charles');
+  });
+
+  it("enveloppé d'un style flex", () => {
+    const rendered = render(<Intro value={'charles'} />);
+    const wrapperComponent = rendered.getByTestId('wrapper');
+    expect(wrapperComponent.props.style).toMatchObject({flex: 1});
+  });
+
+  it('devrait rendre le texte rouge', () => {
+    const rendered = render(<Intro value={'charles'} />);
+    const textComponent = rendered.getByTestId('text');
+    expect(textComponent.props.style).toMatchObject({color: 'red'});
+  });
 });

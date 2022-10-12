@@ -1,36 +1,23 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`rend correctement 1`] = `
+exports[`<Intro /> corresponde au composant 1`] = `
 <View
   style={
     Object {
-      "alignItems": "center",
-      "backgroundColor": "#F5FCFF",
-      "justifyContent": "center",
+      "flex": 1,
     }
   }
+  testID="wrapper"
 >
   <Text
     style={
       Object {
-        "fontSize": 20,
-        "margin": 10,
-        "textAlign": "center",
+        "color": "red",
       }
     }
+    testID="text"
   >
-    Bienvenue sur React Native !
-  </Text>
-  <Text
-    style={
-      Object {
-        "color": "#333333",
-        "marginBottom": 5,
-        "textAlign": "center",
-      }
-    }
-  >
-    C'est un test de snapshot pour React Native.
+    charles
   </Text>
 </View>
 `;

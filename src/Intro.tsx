@@ -1,23 +1,12 @@
+import {View, Text} from 'react-native';
 import React from 'react';
-import {Button, Text, TextInput, View} from 'react-native';
 
-const Intro = () => {
-  const [name, setUser] = React.useState('');
-  const [show, setShow] = React.useState(false);
+const Intro = props => {
   return (
-    <View>
-      <TextInput value={name} onChangeText={setUser} testID="input" />
-      <Button
-        title="Print Username"
-        onPress={() => {
-          // let's pretend this is making a server request, so it's async
-          // (you'd want to mock this imaginary request in your unit tests)...
-          setTimeout(() => {
-            setShow(true);
-          }, Math.floor(Math.random() * 200));
-        }}
-      />
-      {show && <Text testID="printed-username">{name}</Text>}
+    <View style={{flex: 1}} testID={'wrapper'}>
+      <Text style={{color: 'red'}} testID={'text'}>
+        {props.value}
+      </Text>
     </View>
   );
 };
