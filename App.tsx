@@ -1,114 +1,141 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * Generated with the TypeScript template
- * https://github.com/react-native-community/react-native-template-typescript
- *
- * @format
- */
-
-import React from 'react';
+import React, {useState, useRef} from 'react';
 import {
   SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
-  Text,
-  useColorScheme,
   View,
+  Text,
+  StatusBar,
+  Image,
+  Switch,
 } from 'react-native';
-
 import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+  Transitioning,
+  TransitioningView,
+  Transition,
+} from 'react-native-reanimated';
 
-const Section: React.FC<{
-  title: string;
-}> = ({children, title}) => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Feather from 'react-native-vector-icons/Feather';
+
+Ionicons.loadFont();
+Feather.loadFont();
+
+// declare var global: {HermesInternal: null | {}};
 
 const App = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
+  const ref = useRef<TransitioningView>(null);
+  const [isDarkMode, setDarkMode] = useState(false);
+  const transition = (
+    <Transition.Together>
+      <Transition.In type="fade" durationMs={600} />
+      <Transition.Out type="fade" durationMs={600} />
+    </Transition.Together>
+  );
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+    <>
+      <StatusBar barStyle="dark-content" />
+      <Transitioning.View style={{flex: 1}} {...{ref, transition}}>
+        {isDarkMode && (
+          <View
+            style={{...StyleSheet.absoluteFillObject, backgroundColor: 'black'}}
+          />
+        )}
+        <View style={{marginVertical: 40, marginHorizontal: 20}}>
+          <View style={styles.switchWrapper}>
+            <Switch
+              value={isDarkMode}
+              onValueChange={() => {
+                if (ref.current) {
+                  ref.current.animateNextTransition();
+                }
+                setDarkMode(!isDarkMode);
+              }}
+            />
+            {isDarkMode ? (
+              <Ionicons
+                name="ios-sunny"
+                size={25}
+                style={{marginLeft: 20}}
+                color={'#fff'}
+              />
+            ) : (
+              <Ionicons
+                name="ios-moon"
+                size={25}
+                style={{marginLeft: 20}}
+                color={'teal'}
+              />
+            )}
+          </View>
+          {/* <View style={styles.imageWrapper}>
+            <Image
+              source={require('./src/assets/images/woman.jpg')}
+              style={styles.image}
+            />
+          </View> */}
+          <Text
+            style={{
+              textAlign: 'center',
+              fontSize: 20,
+              marginBottom: 25,
+              color: isDarkMode ? '#fff' : 'black',
+            }}>
+            An Image of a Model
+          </Text>
+          <View style={styles.iconsWrapper}>
+            <View style={styles.icon}>
+              <Feather name="github" size={35} color="#fff" />
+            </View>
+            <View style={styles.icon}>
+              <Feather name="twitter" size={35} color="#fff" />
+            </View>
+            <View style={styles.icon}>
+              <Feather name="facebook" size={35} color="#fff" />
+            </View>
+          </View>
+          <Text
+            style={{
+              textAlign: 'center',
+              fontSize: 20,
+              marginBottom: 25,
+              color: isDarkMode ? '#fff' : 'black',
+            }}>
+            Follow me on my Social media Accounts for the best JPEGS!!
+          </Text>
         </View>
-      </ScrollView>
-    </SafeAreaView>
+      </Transitioning.View>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  switchWrapper: {
+    flexDirection: 'row',
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  image: {
+    height: 300,
+    width: 300,
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  imageWrapper: {
+    height: 300,
+    width: 300,
+    borderRadius: 300 / 2,
+    overflow: 'hidden',
+    marginVertical: 70,
+    alignSelf: 'center',
   },
-  highlight: {
-    fontWeight: '700',
+  iconsWrapper: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 30,
+  },
+  icon: {
+    backgroundColor: 'teal',
+    height: 60,
+    width: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 30,
   },
 });
 
